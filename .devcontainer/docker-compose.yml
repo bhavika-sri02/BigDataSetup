@@ -1,0 +1,56 @@
+x-node: &node
+  build:
+    context: ..
+    dockerfile: cluster/Dockerfile
+  image: hadoop-lab:3.3.6-3.5.7
+
+services:
+  client:
+    <<: *node
+    hostname: client-node
+    networks:
+      hadoop:
+        aliases: [client-node]
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    depends_on: [master, worker1, worker2]
+
+  master:
+    <<: *node
+    hostname: master-node
+    networks:
+      hadoop:
+        aliases: [master-node]
+    volumes:
+      - namenode-data:/opt/hadoop/data/namenode
+    command: /opt/cluster/entrypoint.sh
+
+  worker1:
+    <<: *node
+    hostname: worker-node-1
+    networks:
+      hadoop:
+        aliases: [worker-node-1]
+    volumes:
+      - worker1-data:/opt/hadoop/data/datanode
+    command: /opt/cluster/entrypoint.sh
+
+  worker2:
+    <<: *node
+    hostname: worker-node-2
+    networks:
+      hadoop:
+        aliases: [worker-node-2]
+    volumes:
+      - worker2-data:/opt/hadoop/data/datanode
+    command: /opt/cluster/entrypoint.sh
+
+networks:
+  hadoop:
+    driver: bridge
+
+volumes:
+  namenode-data:
+  worker1-data:
+  worker2-data:
