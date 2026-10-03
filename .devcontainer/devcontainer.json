@@ -3,7 +3,6 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "client",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "hostRequirements": { "cpus": 4, "memory": "16gb", "storage": "64gb" },
   "forwardPorts": [9870, 8088, 4040],
   "portsAttributes": {
     "9870": { "label": "Hadoop NameNode UI", "protocol": "http" },
